@@ -1,0 +1,17 @@
+- hosts: win
+  gather_facts: no
+  tasks:
+  - win_dns_client:
+      adapter_names: '*'
+      ip4v_addresses: 192.168.33.5
+
+  - win_domain_membership:
+      dns_domain_name: ansible.vagrant
+      hostname: newhost2
+      domain_admin_user: ansible\testguy
+      domain_admin_password: password123!
+      state: domain
+    register: dmout
+
+  - win_reboot:
+    when: dmout.reboot_required
